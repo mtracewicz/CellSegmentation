@@ -9,7 +9,7 @@ from progress.bar import ChargingBar as cb
 
 def split(filename: str, output_directory: str = 'out',
           output_shape: Tuple[int, int] = (200, 200),
-          pocket: Tuple(int, int) = (100, 100),
+          pocket: Tuple[int, int] = (100, 100),
           extension: str = '.png'):
 
     image = np.array(Image.open(filename))
@@ -35,14 +35,14 @@ def split(filename: str, output_directory: str = 'out',
 
 def split_directory(directory_name: str,
                     output_shape: Tuple[int, int] = (200, 200),
-                    pocket: Tuple(int, int) = (100, 100),
+                    pocket: Tuple[int, int] = (100, 100),
                     extension: str = '.png'):
 
-    files = os.listdir(dir)
+    files = os.listdir(directory_name)
     with cb('Splitting', max=len(files)) as bar:
         for file in files:
-            split(os.path.join(dir, file),
-                  f'out_{file}', output_shape, pocket, extension)
+            split(os.path.join(directory_name, file), f'out_{file}',
+                  output_shape, pocket, extension)
             bar.next()
 
 

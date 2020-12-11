@@ -1,7 +1,9 @@
 import os
 import sys
-from progress.bar import ChargingBar as cb
+
 from PIL import Image, ImageFilter, UnidentifiedImageError
+from progress.bar import ChargingBar as cb
+
 
 def blur_file(filepath):
     try:
@@ -11,12 +13,14 @@ def blur_file(filepath):
     except UnidentifiedImageError:
         print(f'\nError processing file: {filepath}!\n')
 
+
 def blur_dir(dir):
     files = os.listdir(dir)
     with cb('Bluring', max=len(files)) as bar:
         for file in files:
-            blur_file(os.path.join(dir,file))
+            blur_file(os.path.join(dir, file))
             bar.next()
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:

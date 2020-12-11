@@ -1,8 +1,10 @@
 import os
+import sys
 from typing import Tuple
 
 import numpy as np
 from PIL import Image
+from progress.bar import ChargingBar as cb
 
 
 def parse_name(filename: str) -> Tuple[int, int]:
@@ -31,15 +33,44 @@ def merge_files(src_directory: str,
     vertical_step, horizontal_step = input_shape
     vertical_pocket, horizontal_pocket = pocket
 
-    for image in images:
-        row, column = parse_name(image)
-        start_row = row * (vertical_step - vertical_pocket)
-        start_column = column * (horizontal_step - horizontal_pocket)
-        end_row = start_row + vertical_step
-        end_column = start_column + horizontal_step
-        container[start_row:end_row, start_column:end_column] = np.array(
-            Image.open(os.path.join(src_directory, image)))
+    with cb(f'Merging {src_directory}: ', max=len(images)) as bar:
+        for image in images:
+            row, column = parse_name(image)
+            start_row = row * (vertical_step - vertical_pocket)
+            start_column = column * (horizontal_step - horizontal_pocket)
+            end_row = start_row + vertical_step
+            end_column = start_column + horizontal_step
+            container[start_row:end_row, start_column:end_column] = np.array(
+                Image.open(os.path.join(src_directory, image)))
+            bar.next()
 
     container = container.astype('uint8')
     img = Image.fromarray(container)
     img.save(output_filename)
+
+
+def merge_directories(directories: list[str],
+                      output_shape: Tuple[int, int, int] = (1200, 1600, 3),
+                      input_shape: Tuple[int, int] = (200, 200),
+                      pocket: Tuple[int, int] = (200, 200),
+                      output_filename='out.png'):
+
+    with cb('Merging', max=len(directories)) as bar:
+        for directory in directories:
+            merge_files(directory, output_shape, input_shape,
+                        pocket, f'{directory}_{output_filename}')
+            bar.next()
+
+
+if __name__ == "__main__":
+    if len(sys.argv) <= 2:
+        print('Usage: python merge.py input_directory [input_directory...]')
+        exit(1)
+
+    for dir in sys.argv:
+        if not os.path.isdir(dir):
+            print(
+                'Usage: python merge.py input_directory [input_directory...]')
+            exit(1)
+    else:
+        merge_directories(*sys.argv[1:])

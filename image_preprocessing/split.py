@@ -47,13 +47,13 @@ def split_directory(directory_name: str,
 
 
 if __name__ == "__main__":
-    if len(sys.argv) <= 2:
+    if len(sys.argv) == 2:
         print('Usage: python split.py input_directory/input_file')
         exit(1)
 
     if os.path.isdir(sys.argv[1]):
         print('Processing directory')
-        split_directory(*sys.argv[1:])
+        split_directory(sys.argv[1])
     else:
         print('Processing file')
-        split(*sys.argv[1:])
+        split(sys.argv[1])

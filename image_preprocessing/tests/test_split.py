@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from image_preprocessing.split import create_new_image
+from image_preprocessing.preprocessing.split import create_new_image
 from PIL import Image
 
 

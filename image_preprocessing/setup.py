@@ -6,6 +6,6 @@ setup(
    description='Image preprocessing module for unet',
    author='Michał Tracewicz',
    author_email='m.tracewicz@gmail.com',
-   packages=['image_preprocessing'],
+   packages=['preprocessing'],
    install_requires=['numpy', 'Pillow', 'progress']
 )

@@ -28,7 +28,7 @@ jobs:
             x=`git diff --numstat | wc -l`
             [[ $x -eq 1 ]] &&
             git add docs/index.html &&
-            git commit -m "Build website [ci skip]" &&
+            git commit -m "Deployed website. [ci skip]" &&
             git push ||
             echo 'Nothing to do.'
 

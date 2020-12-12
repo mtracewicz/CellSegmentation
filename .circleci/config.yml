@@ -21,13 +21,16 @@ jobs:
       - python/install-packages:
           pkg-manager: pip
       - run:
-        command: |
-          jupyter-nbconvert --to html demo.ipynb --stdout  > docs/index.html;
-          git config user.email "m.tracewicz@gmail.com";
-          git config user.name "Michał Tracewicz";
-          git add docs/index.html;
-          git commit -m "Build website [ci skip]";
-          git push;
+          command: |
+            jupyter-nbconvert --to html demo.ipynb --stdout  > docs/index.html;
+            git config user.email "m.tracewicz@gmail.com";
+            git config user.name "Michał Tracewicz";
+            x=`git diff --numstat | wc -l`
+            [[ $x -eq 1 ]] &&
+            git add docs/index.html &&
+            git commit -m "Build website [ci skip]" &&
+            git push ||
+            echo 'Nothing to do.'
 
 workflows:
   main:

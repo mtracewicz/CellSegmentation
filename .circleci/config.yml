@@ -14,8 +14,23 @@ jobs:
           command: |
             cd image_preprocessing && tox
           name: Test
+  build-website:
+    executor: python/default
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+      - run:
+        command: |
+          jupyter-nbconvert --to html demo.ipynb --stdout  > docs/index.html;
+          git config user.email "m.tracewicz@gmail.com";
+          git config user.name "Michał Tracewicz";
+          git add docs/index.html;
+          git commit -m "Build website [ci skip]";
+          git push;
 
 workflows:
   main:
     jobs:
       - build-and-test
+      - build-website

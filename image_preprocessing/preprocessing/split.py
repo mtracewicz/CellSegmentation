@@ -57,13 +57,11 @@ def create_new_image(image: Image.Image,
                      image_width: int,
                      image_height: int,
                      horizontal_pocket: int,
-                     vertical_pocket: int,
-                     horizontal_step: int,
-                     vertical_step: int) -> np.ndarray:
+                     vertical_pocket: int) -> np.ndarray:
     horizontal_start = column*(image_width - horizontal_pocket)
     vertical_start = row*(image_height - vertical_pocket)
     return Image.fromarray(np.copy(
-        image[vertical_start:vertical_start+vertical_step, horizontal_start:horizontal_start+horizontal_step]))
+        image[vertical_start:vertical_start+image_height, horizontal_start:horizontal_start+image_width]))
 
 
 if __name__ == "__main__":

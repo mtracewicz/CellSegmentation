@@ -5,14 +5,21 @@ orbs:
 
 jobs:
   build-and-test:
-  executor: python/default
+    executor: python/default
     steps:
       - checkout
       - python/install-packages:
-          pip-dependency-file: requirements.txt
           pkg-manager: pip
+      - python/install-packages:
+          pip-dependency-file: dev-requirements.txt
+          pkg-manager: pip
+      - python/install-packages:
+          args: pytest
+          pkg-manager: pip
+          pypi-cache: false
       - run:
-          command: cd image_preprocessing && tox
+          command: |
+            pytest --version
           name: Test
 
 workflows:

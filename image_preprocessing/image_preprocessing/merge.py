@@ -7,19 +7,17 @@ from PIL import Image
 from progress.bar import ChargingBar as cb
 
 
-def parse_name(filename: str) -> Tuple[int, int]:
-    if os.path.isdir(filename):
-        raise IsADirectoryError()
-    filename = os.path.basename(filename)
-    filename = os.path.splitext(filename)[0]
-    filenames = filename.split('_')
+def merge_directories(directories: list[str],
+                      output_shape: Tuple[int, int, int] = (1200, 1600, 3),
+                      input_shape: Tuple[int, int] = (200, 200),
+                      pocket: Tuple[int, int] = (200, 200),
+                      output_filename='out.png'):
 
-    if len(filename) < 3:
-        raise IndexError('Filename must have format of *_row_column.extension')
-
-    row = int(filenames[-2])
-    column = int(filenames[-1])
-    return (row, column)
+    with cb('Merging', max=len(directories)) as bar:
+        for directory in directories:
+            merge_files(directory, output_shape, input_shape,
+                        pocket, f'{directory}_{output_filename}')
+            bar.next()
 
 
 def merge_files(src_directory: str,
@@ -49,17 +47,19 @@ def merge_files(src_directory: str,
     img.save(output_filename)
 
 
-def merge_directories(directories: list[str],
-                      output_shape: Tuple[int, int, int] = (1200, 1600, 3),
-                      input_shape: Tuple[int, int] = (200, 200),
-                      pocket: Tuple[int, int] = (200, 200),
-                      output_filename='out.png'):
+def parse_name(filename: str) -> Tuple[int, int]:
+    if os.path.isdir(filename):
+        raise IsADirectoryError()
+    filename = os.path.basename(filename)
+    filename = os.path.splitext(filename)[0]
+    filenames = filename.split('_')
 
-    with cb('Merging', max=len(directories)) as bar:
-        for directory in directories:
-            merge_files(directory, output_shape, input_shape,
-                        pocket, f'{directory}_{output_filename}')
-            bar.next()
+    if len(filename) < 3:
+        raise IndexError('Filename must have format of *_row_column.extension')
+
+    row = int(filenames[-2])
+    column = int(filenames[-1])
+    return (row, column)
 
 
 if __name__ == "__main__":

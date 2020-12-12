@@ -7,19 +7,17 @@ from PIL import Image
 from progress.bar import ChargingBar as cb
 
 
-def create_new_image(image: Image.Image,
-                     column: int,
-                     row: int,
-                     image_width: int,
-                     image_height: int,
-                     horizontal_pocket: int,
-                     vertical_pocket: int,
-                     horizontal_step: int,
-                     vertical_step: int) -> np.ndarray:
-    horizontal_start = column*(image_width - horizontal_pocket)
-    vertical_start = row*(image_height - vertical_pocket)
-    return Image.fromarray(np.copy(
-        image[vertical_start:vertical_start+vertical_step, horizontal_start:horizontal_start+horizontal_step]))
+def split_directory(directory_name: str,
+                    output_shape: Tuple[int, int] = (200, 200),
+                    pocket: Tuple[int, int] = (100, 100),
+                    extension: str = '.png'):
+
+    files = os.listdir(directory_name)
+    with cb('Splitting', max=len(files)) as bar:
+        for file in files:
+            split(os.path.join(directory_name, file), f'out_{file}',
+                  output_shape, pocket, extension)
+            bar.next()
 
 
 def split(filename: str, output_directory: str = 'out',
@@ -53,17 +51,19 @@ def split(filename: str, output_directory: str = 'out',
             tmp_img.save(new_filename)
 
 
-def split_directory(directory_name: str,
-                    output_shape: Tuple[int, int] = (200, 200),
-                    pocket: Tuple[int, int] = (100, 100),
-                    extension: str = '.png'):
-
-    files = os.listdir(directory_name)
-    with cb('Splitting', max=len(files)) as bar:
-        for file in files:
-            split(os.path.join(directory_name, file), f'out_{file}',
-                  output_shape, pocket, extension)
-            bar.next()
+def create_new_image(image: Image.Image,
+                     column: int,
+                     row: int,
+                     image_width: int,
+                     image_height: int,
+                     horizontal_pocket: int,
+                     vertical_pocket: int,
+                     horizontal_step: int,
+                     vertical_step: int) -> np.ndarray:
+    horizontal_start = column*(image_width - horizontal_pocket)
+    vertical_start = row*(image_height - vertical_pocket)
+    return Image.fromarray(np.copy(
+        image[vertical_start:vertical_start+vertical_step, horizontal_start:horizontal_start+horizontal_step]))
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ import tensorflow as tf
 from PIL import Image
 from progress.bar import ChargingBar as cb
 
-from model import dice_coef
+from neural_network.unet.model import dice_coef
 
 
 def make_predictions_for_images_in_directory(model: tf.keras.Model, input_directory: str, output_directory: str = 'out'):

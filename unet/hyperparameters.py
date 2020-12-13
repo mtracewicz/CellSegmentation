@@ -1,5 +1,5 @@
 # Hyperparameters
-learning_rate = 0.015
-epochs = 40
-batch_size = 5
-validation_split = 0.2
+LEARNING_RATE = 0.015
+EPOCHS = 40
+BATCH_SIZE = 5
+VALIDATION_SPLIT = 0.2

@@ -52,15 +52,3 @@ def dice_coef(y_true, y_pred):
     intersection = K.sum(y_true_f * y_pred_f)
     coef = (2. * intersection + K.epsilon()) / (K.sum(y_true_f) + K.sum(y_pred_f) + K.epsilon())
     return coef
-
-def save_model(model, checkpoint_name, to_json = True):
-    # Saving compiled model
-    tf.keras.models.save_model(
-        model,
-        f'./checkpoints/{checkpoint_name}/{checkpoint_name}'
-    )
-    # Saving fo tensorflowjs 
-    if to_json:
-        with open(f'./checkpoints/{checkpoint_name}/{checkpoint_name}.json', "w") as file:
-            file.write(model.to_json())
-            file.flush()

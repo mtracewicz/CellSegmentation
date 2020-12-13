@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image
 from progress.bar import ChargingBar as cb
 import sys
+from unet.model import dice_coef
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

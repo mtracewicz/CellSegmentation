@@ -19,10 +19,9 @@ jobs:
     executor: python/default
     steps:
       - checkout
-      - python/install-packages:
-          pkg-manager: pip
       - run:
           command: |
+            pip install notebook &&
             jupyter-nbconvert --to html demo.ipynb --stdout  > docs/index.html;
             git config user.email "m.tracewicz@gmail.com";
             git config user.name "Michał Tracewicz";

@@ -6,7 +6,7 @@ import tensorflow as tf
 from PIL import Image
 from progress.bar import ChargingBar as cb
 
-from neural_network.unet.model import dice_coef
+from model import dice_coef
 
 
 def make_predictions_for_images_in_directory(model: tf.keras.Model, input_directory: str, output_directory: str = 'out'):
@@ -32,6 +32,7 @@ def make_prediction_for_image(model: tf.keras.Model, input: str, output_name: st
 def make_prediction(model: tf.keras.Model, input: str) -> np.ndarray:
     if os.path.isdir(input):
         raise IsADirectoryError()
+
     # Loading data
     image = Image.open(input)
     data = np.array(image, dtype=np.float64)
@@ -40,7 +41,7 @@ def make_prediction(model: tf.keras.Model, input: str) -> np.ndarray:
 
     # Making a prediction and converting to uint8
     prediction = (model.predict(data)*255)[0]
-    return (np.append(prediction, np.zeros((prediction+(2))), axis=2)).astype(np.uint8)
+    return (np.append(prediction, np.zeros((prediction.shape[:-1]+tuple([2]))), axis=2)).astype(np.uint8)
 
 
 def save_prediction(prediction: np.ndarray, output_name: str = 'prediction.png'):

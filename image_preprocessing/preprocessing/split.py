@@ -11,12 +11,15 @@ def split_directory(directory_name: str,
                     output_shape: Tuple[int, int] = (200, 200),
                     pocket: Tuple[int, int] = (100, 100),
                     extension: str = '.png'):
-
+    if not os.path.isdir(directory_name):
+        raise NotADirectoryError()
     files = os.listdir(directory_name)
     with cb('Splitting', max=len(files)) as bar:
         for file in files:
-            split(os.path.join(directory_name, file), f'out_{file}',
-                  output_shape, pocket, extension)
+            file_path = os.path.join(directory_name, file)
+            if not os.path.isdir(file_path):
+                split(file_path, f'out_{file}',
+                    output_shape, pocket, extension)
             bar.next()
 
 
@@ -24,6 +27,9 @@ def split(filename: str, output_directory: str = 'out',
           output_shape: Tuple[int, int] = (200, 200),
           pocket: Tuple[int, int] = (100, 100),
           extension: str = '.png'):
+
+    if os.path.isdir(filename):
+            raise IsADirectoryError()
 
     image = np.array(Image.open(filename))
     image_width, image_height = image.shape[:2]
@@ -51,13 +57,19 @@ def split(filename: str, output_directory: str = 'out',
             tmp_img.save(new_filename)
 
 
-def create_new_image(image: Image.Image,
+def create_new_image(image: np.ndarray,
                      column: int,
                      row: int,
                      image_width: int,
                      image_height: int,
                      horizontal_pocket: int,
                      vertical_pocket: int) -> np.ndarray:
+    if horizontal_pocket >= image_width or vertical_pocket >= image_height:
+        raise ValueError('Pocket must be smaller then image size')
+    if column < 0 or row < 0 or image_width <= 0 or image_height <= 0 or horizontal_pocket < 0 or vertical_pocket < 0:
+        raise ValueError('Must be positive numbers')
+    if type(image) != np.ndarray:
+        raise TypeError()
     horizontal_start = column*(image_width - horizontal_pocket)
     vertical_start = row*(image_height - vertical_pocket)
     return Image.fromarray(np.copy(

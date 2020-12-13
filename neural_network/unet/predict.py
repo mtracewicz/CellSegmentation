@@ -10,6 +10,8 @@ from neural_network.unet.model import dice_coef
 
 
 def make_predictions_for_images_in_directory(model: tf.keras.Model, input_directory: str, output_directory: str = 'out'):
+    if not os.path.exists(input_directory):
+        raise ValueError('Directory does not exists')
     if not os.path.isdir(input_directory):
         raise NotADirectoryError()
     # Loading data
@@ -23,6 +25,8 @@ def make_predictions_for_images_in_directory(model: tf.keras.Model, input_direct
 
 
 def make_prediction_for_image(model: tf.keras.Model, input: str, output_name: str = 'prediction.png'):
+    if not os.path.exists(os.path.dirname(input)):
+        raise ValueError('Parent directory does not exist!')
     if os.path.isdir(input):
         raise IsADirectoryError()
     prediction = make_prediction(model, input)

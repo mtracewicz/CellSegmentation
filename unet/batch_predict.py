@@ -16,7 +16,6 @@ if __name__ == "__main__":
 
     # Loading data
     imgs = os.listdir(sys.argv[2])
-    l = []
     with cb('Predicting',max=len(imgs)) as b:
         for i, img in enumerate(imgs):
             image = Image.open(os.path.join(sys.argv[2],img))
@@ -26,13 +25,9 @@ if __name__ == "__main__":
             # Making a prediction and converting to uint8
             prediction = (model.predict(data)*255)[0]
             prediction = (np.append(prediction,np.zeros((200,200,2)),axis=2)).astype(np.uint8)
-            
-            x= len(np.where(prediction[0,]!=0))
-            if x!=0:
-                l.append((i,x))
 
             # Creating and saving an image
             res = Image.fromarray(prediction)
             res.save(os.path.join('_out',f"{i}_res.png"))
             b.next()
-    print(f"Most coloured pixels: {max(l)[1]}")
+    print('Finished!')

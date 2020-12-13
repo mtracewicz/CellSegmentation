@@ -13,6 +13,7 @@ jobs:
       - run:
           command: |
             cd image_preprocessing && tox
+            cd ../neural_network && tox
           name: Test
   build-website:
     executor: python/default

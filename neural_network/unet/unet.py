@@ -1,14 +1,14 @@
-from unet.model import dice_coef, get_model
 import os
 import sys
 from typing import Tuple
 
 import numpy as np
 import tensorflow as tf
+from neural_network.unet.hyperparameters import (BATCH_SIZE, EPOCHS,
+                                                 LEARNING_RATE,
+                                                 VALIDATION_SPLIT)
+from neural_network.unet.model import dice_coef, get_model
 from PIL import Image
-
-from unet.hyperparameters import (BATCH_SIZE, EPOCHS, LEARNING_RATE,
-                                  VALIDATION_SPLIT)
 
 
 def load_images(dir: str, images_shape: Tuple[int, int, int] = (200, 200, 3)) -> np.array:

@@ -7,7 +7,7 @@ from PIL import Image
 from progress.bar import ChargingBar as cb
 
 
-def split_directory(directory_name: str,
+def split_images_in_directory(directory_name: str,
                     output_shape: Tuple[int, int] = (200, 200),
                     pocket: Tuple[int, int] = (100, 100),
                     extension: str = '.png'):
@@ -18,12 +18,12 @@ def split_directory(directory_name: str,
         for file in files:
             file_path = os.path.join(directory_name, file)
             if not os.path.isdir(file_path):
-                split(file_path, f'out_{file}',
+                split_image(file_path, f'out_{file}',
                     output_shape, pocket, extension)
             bar.next()
 
 
-def split(filename: str, output_directory: str = 'out',
+def split_image(filename: str, output_directory: str = 'out',
           output_shape: Tuple[int, int] = (200, 200),
           pocket: Tuple[int, int] = (100, 100),
           extension: str = '.png'):
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     if os.path.isdir(sys.argv[1]):
         print('Processing directory')
-        split_directory(sys.argv[1])
+        split_images_in_directory(sys.argv[1])
     else:
         print('Processing file')
-        split(sys.argv[1])
+        split_image(sys.argv[1])

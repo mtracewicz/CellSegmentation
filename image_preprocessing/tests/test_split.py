@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from image_preprocessing.preprocessing.split import create_new_image, split, split_directory
+from image_preprocessing.preprocessing.split import create_new_image, split_image, split_images_in_directory
 from PIL import Image
 
 
@@ -41,11 +41,11 @@ def test_not_dir(tmpdir):
     f=tmpdir.join('test.txt')
     f.write('test')
     with pytest.raises(NotADirectoryError) as e_info:
-        split_directory('test.txt')
+        split_images_in_directory('test.txt')
 
 def test_is_dir(tmpdir):
     with pytest.raises(IsADirectoryError) as e_info:
-        split(tmpdir)
+        split_image(tmpdir)
 
 def test_image_type(tmpdir):
     input = Image.fromarray(np.zeros((100, 100, 3), dtype=np.uint8))

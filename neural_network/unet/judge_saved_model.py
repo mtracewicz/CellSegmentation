@@ -1,5 +1,5 @@
 import tensorflow as tf
-from hyperparameters import batch_size
+from neural_network.hyperparameters import batch_size
 import sys
 
 if __name__ == "__main__":

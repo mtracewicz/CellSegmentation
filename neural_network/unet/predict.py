@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
     # Restoring model
     model = tf.keras.models.load_model(
-        os.path.join('trained_models', sys.argv[1]), custom_objects={'dice_coef': dice_coef, 'dice_coef_loss':dice_coef_loss})
+        os.path.join('trained_models', sys.argv[1]), custom_objects={'dice_coef': dice_coef, 'dice_coef_loss': dice_coef_loss})
 
     if os.path.isdir(sys.argv[2]):
         make_predictions_for_images_in_directory(model, sys.argv[2])

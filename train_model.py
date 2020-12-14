@@ -2,11 +2,12 @@ import os
 import sys
 
 import tensorflow as tf
+
 from neural_network.unet.hyperparameters import (BATCH_SIZE, EPOCHS,
                                                  LEARNING_RATE,
                                                  VALIDATION_SPLIT)
 from neural_network.unet.image_loader import load_images
-from neural_network.unet.model import dice_coef, dice_coef_loss,  get_model
+from neural_network.unet.model import dice_coef, dice_coef_loss, get_model
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
@@ -16,7 +17,7 @@ if __name__ == "__main__":
     print('Loading data')
     # Loading data
     x_train = load_images(sys.argv[1])
-    y_train = load_images(sys.argv[2],(200,200,4))
+    y_train = load_images(sys.argv[2], (200, 200, 4))
 
     split = int(x_train.shape[0] * (1-VALIDATION_SPLIT))
 

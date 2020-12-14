@@ -30,7 +30,7 @@ if __name__ == "__main__":
     # Establish the model's topography
     model = get_model((200, 200, 3))
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE),
-                  loss=tf.keras.losses.BinaryCrossentropy(), metrics=['accuracy'])
+                  loss=tf.keras.losses.BinaryCrossentropy(), metrics=[dice_coef])
 
     print('Model info')
     print(model.summary())

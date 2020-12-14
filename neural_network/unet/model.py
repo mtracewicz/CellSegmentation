@@ -1,3 +1,4 @@
+import numpy as np
 import tensorflow as tf
 from tensorflow.keras import backend as K
 
@@ -28,7 +29,7 @@ def conv2d_block(input_tensor, n_filters, kernel_size=3):
     x = tf.keras.layers.Activation("relu")(x)
     return x
 
-def get_model(input_size):
+def get_model(input_size: np.ndarray)->tf.kreas.Model:
     inputs = tf.keras.Input(input_size)
     # contracting path
     

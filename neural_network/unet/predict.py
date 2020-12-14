@@ -3,10 +3,9 @@ import sys
 
 import numpy as np
 import tensorflow as tf
+from neural_network.unet.model import dice_coef
 from PIL import Image
 from progress.bar import ChargingBar as cb
-
-from neural_network.unet.model import dice_coef
 
 
 def make_predictions_for_images_in_directory(model: tf.keras.Model, input_directory: str, output_directory: str = 'out'):
@@ -63,7 +62,7 @@ if __name__ == "__main__":
 
     # Restoring model
     model = tf.keras.models.load_model(
-        os.path.join('trained_models', sys.argv[1]))
+        os.path.join('trained_models', sys.argv[1]), custom_objects={'dice_coef': dice_coef})
 
     if os.path.isdir(sys.argv[2]):
         make_predictions_for_images_in_directory(model, sys.argv[2])

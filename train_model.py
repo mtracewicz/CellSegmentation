@@ -6,7 +6,7 @@ from neural_network.unet.hyperparameters import (BATCH_SIZE, EPOCHS,
                                                  LEARNING_RATE,
                                                  VALIDATION_SPLIT)
 from neural_network.unet.image_loader import load_images
-from neural_network.unet.model import dice_coef, get_model
+from neural_network.unet.model import dice_coef, dice_coef_loss,  get_model
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     print('Loading data')
     # Loading data
     x_train = load_images(sys.argv[1])
-    y_train = load_images(sys.argv[2],(200,200,4))[:, :, :, 3]
+    y_train = load_images(sys.argv[2],(200,200,4))
 
     split = int(x_train.shape[0] * (1-VALIDATION_SPLIT))
 
@@ -30,14 +30,14 @@ if __name__ == "__main__":
     # Establish the model's topography
     model = get_model((200, 200, 3))
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE),
-                  loss=tf.keras.losses.BinaryCrossentropy(), metrics=[dice_coef])
+                  loss=dice_coef_loss, metrics=[dice_coef])
 
     print('Model info')
     print(model.summary())
 
     print('Traing model')
     model.fit(x_train[:split], y_train[:split],
-              batch_size=BATCH_SIZE, epochs=EPOCHS)
+              batch_size=BATCH_SIZE, epochs=EPOCHS, shuffle=True)
 
     print('Model evaluation')
     model.evaluate(x_train[split:], y_train[split:])

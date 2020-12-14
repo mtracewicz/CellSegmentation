@@ -3,7 +3,7 @@ import sys
 
 import numpy as np
 import tensorflow as tf
-from neural_network.unet.model import dice_coef
+from neural_network.unet.model import dice_coef, dice_coef_loss
 from PIL import Image
 from progress.bar import ChargingBar as cb
 
@@ -44,7 +44,7 @@ def make_prediction(model: tf.keras.Model, input: str) -> np.ndarray:
 
     # Making a prediction and converting to uint8
     prediction = (model.predict(data)*255)[0]
-    return (np.append(prediction, np.zeros((prediction.shape[:-1]+tuple([2]))), axis=2)).astype(np.uint8)
+    return prediction.astype(np.uint8)
 
 
 def save_prediction(prediction: np.ndarray, output_name: str = 'prediction.png'):
@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
     # Restoring model
     model = tf.keras.models.load_model(
-        os.path.join('trained_models', sys.argv[1]), custom_objects={'dice_coef': dice_coef})
+        os.path.join('trained_models', sys.argv[1]), custom_objects={'dice_coef': dice_coef, 'dice_coef_loss':dice_coef_loss})
 
     if os.path.isdir(sys.argv[2]):
         make_predictions_for_images_in_directory(model, sys.argv[2])

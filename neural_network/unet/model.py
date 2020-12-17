@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras import backend as K
 
-N_FILTERS = 48
+N_FILTERS = 32 
 DROPOUT = 0.5
 
 
@@ -48,7 +48,7 @@ def get_model(input_size: np.ndarray) -> tf.keras.Model:
     l5 = expansive_block(l4, N_FILTERS*4, l3[0])
     l6 = expansive_block(l5, N_FILTERS*2, l2[0])
     l7 = expansive_block(l6, N_FILTERS, l1[0])
-    outputs = tf.keras.layers.Conv2D(4, 1, activation='sigmoid')(l7)
+    outputs = tf.keras.layers.Conv2D(3, 1, activation='sigmoid')(l7)
 
     return tf.keras.Model(inputs=inputs, outputs=outputs)
 
@@ -56,9 +56,9 @@ def get_model(input_size: np.ndarray) -> tf.keras.Model:
 def dice_coef(y_true, y_pred, smooth=1):
     y_true_f = K.flatten(y_true)
     y_pred_f = K.flatten(y_pred)
-    intersection = K.sum(y_true_f * y_pred_f)
-    return (2. * intersection + smooth) / (K.sum(y_true_f) + K.sum(y_pred_f) + smooth)
+    return (2. * K.sum(y_true_f * y_pred_f) + smooth) / (K.sum(y_true_f) + K.sum(y_pred_f) + smooth)
 
 
 def dice_coef_loss(y_true, y_pred):
-    return -dice_coef(y_true, y_pred)
+    return 1-dice_coef(y_true, y_pred)
+

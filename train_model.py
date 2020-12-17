@@ -17,7 +17,7 @@ if __name__ == "__main__":
     print('Loading data')
     # Loading data
     x_train = load_images(sys.argv[1])
-    y_train = load_images(sys.argv[2], (200, 200, 4))
+    y_train = load_images(sys.argv[2])#, (200, 200, 4))
 
     split = int(x_train.shape[0] * (1-VALIDATION_SPLIT))
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     # Establish the model's topography
     model = get_model((200, 200, 3))
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE),
-                  loss=dice_coef_loss, metrics=[dice_coef])
+                  loss=dice_coef_loss,metrics=[dice_coef])
 
     print('Model info')
     print(model.summary())

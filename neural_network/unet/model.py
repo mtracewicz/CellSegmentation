@@ -58,7 +58,24 @@ def dice_coef(y_true, y_pred, smooth=1):
     y_pred_f = K.flatten(y_pred)
     return (2. * K.sum(y_true_f * y_pred_f) + smooth) / (K.sum(y_true_f) + K.sum(y_pred_f) + smooth)
 
+def dice_coef2(y_true, y_pred, smooth=1):
+    intersection = tf.reduce_sum(y_true * y_pred, axis=[1, 2, 3])
+    union = tf.reduce_sum(y_true, axis=[1, 2, 3]) + tf.reduce_sum(y_pred, axis=[1, 2, 3])
+    return tf.reduce_mean((2. * intersection + smooth) / (union + smooth), axis=0)
 
 def dice_coef_loss(y_true, y_pred):
-    return 1-dice_coef(y_true, y_pred)
+    return 1-dice_coef2(y_true, y_pred)
+
+def custom_metric(y_true, y_pred):
+    true_black = tf.where(K.flatten(y_true) == [0,0,0], 1, 0)
+    true_red = tf.where(K.flatten(y_true) == [255,255,255], 1, 0)
+    
+    good_predictions = tf.where(y_true==y_pred,1,0)
+
+    reds_ratio = K.sum(good_predictions*true_red)/K.sum(true_red)
+    blacks_ratio = K.sum(good_predictions*true_black)/K.sum(true_black)
+    return ((3*reds_ratio+blacks_ratio)+1)/5.
+
+def custom_loss(y_true, y_pred):
+    return 1-custom_metric(y_true, y_pred)
 

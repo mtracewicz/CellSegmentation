@@ -3,7 +3,7 @@ import sys
 
 import numpy as np
 import tensorflow as tf
-from neural_network.unet.model import dice_coef, dice_coef_loss
+from neural_network.unet.model import dice_coef, dice_coef_loss,dice_coef2
 from PIL import Image
 from progress.bar import ChargingBar as cb
 

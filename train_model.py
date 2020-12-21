@@ -7,7 +7,7 @@ from neural_network.unet.hyperparameters import (BATCH_SIZE, EPOCHS,
                                                  LEARNING_RATE,
                                                  VALIDATION_SPLIT)
 from neural_network.unet.image_loader import load_images
-from neural_network.unet.model import dice_coef, dice_coef_loss, get_model
+from neural_network.unet.model import dice_coef, dice_coef_loss, get_model, dice_coef2, custom_metric, custom_loss
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
@@ -26,12 +26,13 @@ if __name__ == "__main__":
     # Seting tf/keras options
     tf.keras.backend.set_floatx('float64')
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
     print('Creating model')
     # Establish the model's topography
     model = get_model((200, 200, 3))
-    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE),
-                  loss=dice_coef_loss,metrics=[dice_coef])
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE),loss=custom_loss,metrics=[custom_metric])
+                  #loss=dice_coef_loss,metrics=[dice_coef2])
 
     print('Model info')
     print(model.summary())

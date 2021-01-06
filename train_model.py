@@ -19,7 +19,6 @@ if __name__ == "__main__":
 
     exec(
         f'from {hyperparameters_file} import (BATCH_SIZE, EPOCHS,LEARNING_RATE,VALIDATION_SPLIT')
-
     exec(f'from {model_file} import get_model')
     exec(f'from {metric_and_loss_file} import custom_metric, custom_loss')
 

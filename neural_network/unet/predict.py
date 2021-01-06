@@ -3,7 +3,6 @@ import sys
 
 import numpy as np
 import tensorflow as tf
-from neural_network.unet.model import dice_coef, dice_coef_loss,dice_coef2
 from PIL import Image
 from progress.bar import ChargingBar as cb
 
@@ -56,13 +55,17 @@ def save_prediction(prediction: np.ndarray, output_name: str = 'prediction.png')
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    if len(sys.argv) < 3:
         print("Usage: predict.py model file/directory")
         exit()
 
+    metric_and_loss_file = sys.argv[4] if len(
+        sys.argv) >= 5 else 'neural_network.unet.dice_coef'
+    exec(f'from {metric_and_loss_file} import custom_metric, custom_loss')
+
     # Restoring model
     model = tf.keras.models.load_model(
-        os.path.join('trained_models', sys.argv[1]), custom_objects={'dice_coef': dice_coef, 'dice_coef_loss': dice_coef_loss})
+        os.path.join('trained_models', sys.argv[1]), custom_objects={'custom_metric': custom_metric, 'custom_loss': custom_loss})
 
     if os.path.isdir(sys.argv[2]):
         make_predictions_for_images_in_directory(model, sys.argv[2])

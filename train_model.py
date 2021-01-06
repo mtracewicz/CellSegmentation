@@ -13,7 +13,7 @@ if __name__ == "__main__":
     model_file = sys.argv[4] if len(
         sys.argv) >= 5 else 'neural_network.unet.model'
     metric_and_loss_file = sys.argv[5] if len(
-        sys.argv) >= 6 else 'neural_network.unet.model'
+        sys.argv) >= 6 else 'neural_network.unet.dice_coef'
     hyperparameters_file = sys.argv[6] if len(
         sys.argv) >= 7 else 'neural_network.unet.hyperparameters'
 

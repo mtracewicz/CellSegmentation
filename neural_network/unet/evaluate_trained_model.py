@@ -12,4 +12,4 @@ if __name__ == "__main__":
         os.path.join('trained_models', sys.argv[1]))
     # Loading data
 
-    model.evaluate(x_test,y_test)
+    model.evaluate(x_test, y_test)

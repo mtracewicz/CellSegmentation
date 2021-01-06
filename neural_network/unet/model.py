@@ -68,8 +68,8 @@ def dice_coef_loss(y_true, y_pred):
 
 def custom_metric(y_true, y_pred):
     true_black = tf.where(K.flatten(y_true) == [0,0,0], 1, 0)
-    true_red = tf.where(K.flatten(y_true) == [255,255,255], 1, 0)
-    
+    true_red = tf.where(K.flatten(y_true) == [255,0,0], 1, 0)
+
     good_predictions = tf.where(y_true==y_pred,1,0)
 
     reds_ratio = K.sum(good_predictions*true_red)/K.sum(true_red)

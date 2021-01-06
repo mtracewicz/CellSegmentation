@@ -7,21 +7,21 @@ from neural_network.unet.hyperparameters import (BATCH_SIZE, EPOCHS,
                                                  LEARNING_RATE,
                                                  VALIDATION_SPLIT)
 from neural_network.unet.image_loader import load_images
-from neural_network.unet.model import dice_coef, dice_coef_loss, get_model, dice_coef2, custom_metric, custom_loss
+exec(f'from {sys.argv[4] or "neural_network.unet.model"} import get_model, custom_metric, custom_loss')
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
+    if len(sys.argv) < 4:
         print("Usage: python unet.py inputs_directory truths_directory checkpoint_name")
         exit()
 
     print('Loading data')
     # Loading data
     x_train = load_images(sys.argv[1])
-    y_train = load_images(sys.argv[2])#, (200, 200, 4))
+    y_train = load_images(sys.argv[2])
 
     split = int(x_train.shape[0] * (1-VALIDATION_SPLIT))
 
-    print('Seting up enviorment')
+    print('Seting up environment')
 
     # Seting tf/keras options
     tf.keras.backend.set_floatx('float64')
@@ -31,8 +31,8 @@ if __name__ == "__main__":
     print('Creating model')
     # Establish the model's topography
     model = get_model((200, 200, 3))
-    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE),loss=custom_loss,metrics=[custom_metric])
-                  #loss=dice_coef_loss,metrics=[dice_coef2])
+    model.compile(optimizer=tf.keras.optimizers.Adam(
+        learning_rate=LEARNING_RATE), loss=custom_loss, metrics=[custom_metric])
 
     print('Model info')
     print(model.summary())

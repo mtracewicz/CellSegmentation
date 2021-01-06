@@ -1,7 +1,8 @@
 import os
 import sys
 import numpy as np
-from PIL import Image
+from progress.bar import ChargingBar as cb
+from PIL import Image, UnidentifiedImageError
 
 def remove_alpha_dir(dir):
     files = os.listdir(dir)

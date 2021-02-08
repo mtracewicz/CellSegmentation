@@ -8,9 +8,9 @@ from progress.bar import ChargingBar as cb
 
 
 def split_images_in_directory(directory_name: str,
-                    output_shape: Tuple[int, int] = (200, 200),
-                    pocket: Tuple[int, int] = (100, 100),
-                    extension: str = '.png'):
+                              output_shape: Tuple[int, int] = (200, 200),
+                              pocket: Tuple[int, int] = (100, 100),
+                              extension: str = '.png'):
     if not os.path.isdir(directory_name):
         raise NotADirectoryError()
     files = os.listdir(directory_name)
@@ -21,29 +21,29 @@ def split_images_in_directory(directory_name: str,
                 dir_name = f'out_{f.split(".")[-2]}'
                 if not os.path.exists(dir_name):
                     os.makedirs(dir_name)
-                split_image(file_path,dir_name,
-                    output_shape, pocket, extension)
+                split_image(file_path, dir_name,
+                            output_shape, pocket, extension)
             bar.next()
 
 
 def split_image(filename: str, output_directory: str = 'out',
-          output_shape: Tuple[int, int] = (200, 200),
-          pocket: Tuple[int, int] = (100, 100),
-          extension: str = '.png'):
+                output_shape: Tuple[int, int] = (200, 200),
+                pocket: Tuple[int, int] = (100, 100),
+                extension: str = '.png'):
 
     if os.path.isdir(filename):
-            raise IsADirectoryError()
+        raise IsADirectoryError()
 
     image = np.array(Image.open(filename))
-    image_width, image_height = image.shape[:2]
+    image_height, image_width = image.shape[:2]
     vertical_step, horizontal_step = output_shape
     vertical_pocket, horizontal_pocket = pocket
     extension = extension if extension.startswith(".") else f".{extension}"
 
-    number_of_moves_horizontally = int(
-        image_width/(horizontal_step-horizontal_pocket)) - 1
-    number_of_moves_vertically = int(
-        image_height/(vertical_step-vertical_pocket)) - 1
+    number_of_moves_horizontally = image_width//(
+        horizontal_step-horizontal_pocket) - 1
+    number_of_moves_vertically = image_height//(
+        vertical_step-vertical_pocket) - 1
     for row in range(number_of_moves_vertically):
         for column in range(number_of_moves_horizontally):
             tmp_img = create_new_image(image,
@@ -56,26 +56,29 @@ def split_image(filename: str, output_directory: str = 'out',
             new_filename = os.path.join(
                 output_directory, f'{row}_{column}{extension}')
             tmp_img.save(new_filename)
-            print(new_filename)
 
 
 def create_new_image(image: np.ndarray,
                      column: int,
                      row: int,
-                     image_width: int,
-                     image_height: int,
+                     horizontal_step: int,
+                     vertical_step: int,
                      horizontal_pocket: int,
                      vertical_pocket: int) -> np.ndarray:
-    if horizontal_pocket >= image_width or vertical_pocket >= image_height:
+
+    if horizontal_pocket >= horizontal_step or vertical_pocket >= vertical_step:
         raise ValueError('Pocket must be smaller then image size')
-    if column < 0 or row < 0 or image_width <= 0 or image_height <= 0 or horizontal_pocket < 0 or vertical_pocket < 0:
+
+    if column < 0 or row < 0 or horizontal_step <= 0 or vertical_step <= 0 or horizontal_pocket < 0 or vertical_pocket < 0:
         raise ValueError('Must be positive numbers')
+
     if type(image) != np.ndarray:
         raise TypeError()
-    horizontal_start = column*(image_width - horizontal_pocket)
-    vertical_start = row*(image_height - vertical_pocket)
+
+    horizontal_start = column*(horizontal_step - horizontal_pocket)
+    vertical_start = row*(vertical_step - vertical_pocket)
     return Image.fromarray(np.copy(
-        image[vertical_start:vertical_start+image_height, horizontal_start:horizontal_start+image_width]))
+        image[vertical_start:vertical_start+vertical_step, horizontal_start:horizontal_start+horizontal_step]))
 
 
 if __name__ == "__main__":

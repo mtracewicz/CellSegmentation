@@ -15,10 +15,13 @@ def split_images_in_directory(directory_name: str,
         raise NotADirectoryError()
     files = os.listdir(directory_name)
     with cb('Splitting', max=len(files)) as bar:
-        for file in files:
-            file_path = os.path.join(directory_name, file)
+        for f in files:
+            file_path = os.path.join(directory_name, f)
             if not os.path.isdir(file_path):
-                split_image(file_path, f'out_{file}',
+                dir_name = f'out_{f.split(".")[-2]}'
+                if not os.path.exists(dir_name):
+                    os.makedirs(dir_name)
+                split_image(file_path,dir_name,
                     output_shape, pocket, extension)
             bar.next()
 
@@ -38,23 +41,22 @@ def split_image(filename: str, output_directory: str = 'out',
     extension = extension if extension.startswith(".") else f".{extension}"
 
     number_of_moves_horizontally = int(
-        image_width/(image_width-horizontal_pocket)) - 1
+        image_width/(horizontal_step-horizontal_pocket)) - 1
     number_of_moves_vertically = int(
-        image_height/(image_height-vertical_pocket)) - 1
+        image_height/(vertical_step-vertical_pocket)) - 1
     for row in range(number_of_moves_vertically):
         for column in range(number_of_moves_horizontally):
             tmp_img = create_new_image(image,
                                        column,
                                        row,
-                                       image_width,
-                                       image_height,
-                                       horizontal_pocket,
-                                       vertical_pocket,
                                        horizontal_step,
-                                       vertical_step)
+                                       vertical_step,
+                                       horizontal_pocket,
+                                       vertical_pocket)
             new_filename = os.path.join(
                 output_directory, f'{row}_{column}{extension}')
             tmp_img.save(new_filename)
+            print(new_filename)
 
 
 def create_new_image(image: np.ndarray,
@@ -77,7 +79,7 @@ def create_new_image(image: np.ndarray,
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
+    if len(sys.argv) != 2:
         print('Usage: python split.py input_directory/input_file')
         exit(1)
 

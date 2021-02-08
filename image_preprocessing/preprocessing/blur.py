@@ -23,13 +23,15 @@ def blur_file(filepath, parameter=2):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print('Usage: python imagesblur.py directory/file')
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
+        print('Usage: python imagesblur.py directory/file [blur_parameter]')
         exit(1)
 
     if os.path.isdir(sys.argv[1]):
         print('Processing directory')
-        blur_dir(sys.argv[1])
+        blur_dir(sys.argv[1], sys.argv[2]
+                 if len(sys.argv) == 3 else 2)
     else:
         print('Processing file')
-        blur_file(sys.argv[1])
+        blur_file(sys.argv[1], sys.argv[2]
+                  if len(sys.argv) == 3 else 2)

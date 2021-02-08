@@ -29,13 +29,15 @@ def remove_alpha_file(filepath, threshold):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print('Usage: python remove_alpha.py directory/file')
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
+        print('Usage: python remove_alpha.py directory/file [threshold]')
         exit(1)
 
     if os.path.isdir(sys.argv[1]):
         print('Processing directory')
-        remove_alpha_dir(sys.argv[1])
+        remove_alpha_dir(sys.argv[1], sys.argv[2]
+                         if len(sys.argv) == 3 else 125)
     else:
         print('Processing file')
-        remove_alpha_file(sys.argv[1])
+        remove_alpha_file(sys.argv[1], sys.argv[2]
+                          if len(sys.argv) == 3 else 125)

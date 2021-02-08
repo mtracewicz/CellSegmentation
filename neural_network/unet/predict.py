@@ -12,12 +12,15 @@ def make_predictions_for_images_in_directory(model: tf.keras.Model, input_direct
         raise ValueError('Directory does not exists')
     if not os.path.isdir(input_directory):
         raise NotADirectoryError()
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
     # Loading data
     images = os.listdir(input_directory)
     with cb('Predicting', max=len(images)) as b:
         for image in images:
             make_prediction_for_image(model, os.path.join(input_directory, image), os.path.join(
-                output_directory, f"{image}_prediction.png"))
+                output_directory, f"{os.path.splitext(image)[0]}_prediction.png"))
             b.next()
     print('Finished!')
 

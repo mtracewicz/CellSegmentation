@@ -5,18 +5,18 @@ from PIL import Image, ImageFilter, UnidentifiedImageError
 from progress.bar import ChargingBar as cb
 
 
-def blur_dir(dir):
+def blur_dir(dir, parameter=2):
     files = os.listdir(dir)
     with cb('Bluring', max=len(files)) as bar:
         for file in files:
-            blur_file(os.path.join(dir, file))
+            blur_file(os.path.join(dir, file), parameter)
             bar.next()
 
 
-def blur_file(filepath):
+def blur_file(filepath, parameter=2):
     try:
         im = Image.open(filepath)
-        im = im.filter(ImageFilter.GaussianBlur(2))
+        im = im.filter(ImageFilter.GaussianBlur(parameter))
         im.save(filepath)
     except UnidentifiedImageError:
         print(f'\nError processing file: {filepath}!\n')

@@ -10,7 +10,7 @@ from progress.bar import ChargingBar as cb
 def merge_directories(directories: list[str],
                       output_shape: Tuple[int, int, int] = (1200, 1600, 3),
                       input_shape: Tuple[int, int] = (200, 200),
-                      pocket: Tuple[int, int] = (200, 200),
+                      pocket: Tuple[int, int] = (100, 100),
                       output_filename='out.png'):
 
     with cb('Merging', max=len(directories)) as bar:
@@ -23,7 +23,7 @@ def merge_directories(directories: list[str],
 def merge_files(src_directory: str,
                 output_shape: Tuple[int, int, int] = (1200, 1600, 3),
                 input_shape: Tuple[int, int] = (200, 200),
-                pocket: Tuple[int, int] = (200, 200),
+                pocket: Tuple[int, int] = (100, 100),
                 output_filename: str = 'out.png'):
 
     container = np.zeros(output_shape)
@@ -67,7 +67,7 @@ if __name__ == "__main__":
         print('Usage: python merge.py input_directory [input_directory...]')
         exit(1)
 
-    for dir in sys.argv:
+    for dir in sys.argv[1:]:
         if not os.path.isdir(dir):
             print(
                 'Usage: python merge.py input_directory [input_directory...]')

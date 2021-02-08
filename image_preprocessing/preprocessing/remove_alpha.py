@@ -4,24 +4,25 @@ import numpy as np
 from progress.bar import ChargingBar as cb
 from PIL import Image, UnidentifiedImageError
 
-def remove_alpha_dir(dir):
+
+def remove_alpha_dir(dir, threshold=125):
     files = os.listdir(dir)
     with cb('Removeing alpha', max=len(files)) as bar:
         for file in files:
-            remove_alpha_file(os.path.join(dir, file))
+            remove_alpha_file(os.path.join(dir, file), threshold)
             bar.next()
 
 
-def remove_alpha_file(filepath):
+def remove_alpha_file(filepath, threshold):
     try:
         img = Image.open(filepath)
-        r,g,b,a = img.split()
+        r, g, b, a = img.split()
         r = np.array(r)
         a = np.array(a)
-        r[a>=50]=255
-        r[a<50]=0
+        r[a >= threshold] = 255
+        r[a < threshold] = 0
         r = Image.fromarray(r)
-        img = Image.merge('RGB',(r,g,b))
+        img = Image.merge('RGB', (r, g, b))
         img.save(filepath)
     except UnidentifiedImageError:
         print(f'\nError processing file: {filepath}!\n')

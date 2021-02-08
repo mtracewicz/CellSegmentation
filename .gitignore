@@ -136,4 +136,5 @@ in
 truths
 out
 trained_models
-_groundtruth
+groundtruth
+out_*/

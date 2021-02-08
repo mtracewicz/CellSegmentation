@@ -8,6 +8,7 @@ from PIL import Image
 def load_images(dir: str, images_shape: Tuple[int, int, int] = (200, 200, 3)) -> np.array:
     IMAGES_DIRECTORY = os.path.join(os.getcwd(), dir)
     filenames = os.listdir(IMAGES_DIRECTORY)
+    filenames.sort()
     number_of_images = len(filenames)
     images = np.zeros(tuple([number_of_images])+images_shape)
 

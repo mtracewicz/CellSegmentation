@@ -18,7 +18,7 @@ def split_images_in_directory(directory_name: str,
         for f in files:
             file_path = os.path.join(directory_name, f)
             if not os.path.isdir(file_path):
-                dir_name = f'out_{f.split(".")[-2]}'
+                dir_name = f'out_{directory_name}'
                 if not os.path.exists(dir_name):
                     os.makedirs(dir_name)
                 split_image(file_path, dir_name,
@@ -54,7 +54,7 @@ def split_image(filename: str, output_directory: str = 'out',
                                        horizontal_pocket,
                                        vertical_pocket)
             new_filename = os.path.join(
-                output_directory, f'{row}_{column}{extension}')
+                output_directory, f'{os.path.splitext(os.path.split(filename)[-1])[0]}_{row}_{column}{extension}')
             tmp_img.save(new_filename)
 
 

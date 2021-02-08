@@ -59,8 +59,8 @@ if __name__ == "__main__":
         print("Usage: predict.py model file/directory")
         exit()
 
-    metric_and_loss_file = sys.argv[4] if len(
-        sys.argv) >= 5 else 'neural_network.unet.dice_coef'
+    metric_and_loss_file = sys.argv[3] if len(
+        sys.argv) >= 4 else 'neural_network.unet.dice_coef'
     exec(f'from {metric_and_loss_file} import custom_metric, custom_loss')
 
     # Restoring model
